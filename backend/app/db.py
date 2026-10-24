@@ -15,7 +15,7 @@ def get_db():
 async def connect_db():
     global client
     last_error = None
-    for attempt in range(30):
+    for attempt in range(3):
         try:
             client = AsyncIOMotorClient(settings.mongo_uri, serverSelectionTimeoutMS=2000)
             await client.admin.command("ping")

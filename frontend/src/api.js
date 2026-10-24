@@ -14,6 +14,8 @@ export function clearToken() {
   sessionStorage.removeItem(TOKEN_KEY);
 }
 
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
 export async function api(path, options = {}) {
   const headers = { ...(options.headers || {}) };
   if (options.body && !(options.body instanceof FormData)) {
@@ -21,7 +23,8 @@ export async function api(path, options = {}) {
   }
   const token = getToken();
   if (token) headers.Authorization = `Bearer ${token}`;
-  const res = await fetch(path, {
+  const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
+  const res = await fetch(url, {
     ...options,
     headers,
     body: options.body && !(options.body instanceof FormData) ? JSON.stringify(options.body) : options.body,
